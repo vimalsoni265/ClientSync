@@ -21,21 +21,21 @@ namespace ClientSync.Repository.Interfaces
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Customer> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(int id);
 
         /// <summary>
         /// Adds a requested record to the database.
         /// </summary>
-        /// <param name="customer"></param>
+        /// <param name="record"></param>
         /// <returns></returns>
-        Task AddAsync(T customer);
+        Task AddAsync(T record);
 
         /// <summary>
         /// Updates a requested record in the database.
         /// </summary>
-        /// <param name="customer"></param>
+        /// <param name="record"></param>
         /// <returns></returns>
-        Task UpdateAsync(T customer);
+        Task UpdateAsync(T record);
 
         /// <summary>
         /// Deletes a requested record from the database.

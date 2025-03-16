@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace ClientSync.UI
 {
+    /// <summary>
+    /// Main window of the application.
+    /// </summary>
     public partial class MainWindow : Form
     {
         #region Fields
@@ -13,6 +16,8 @@ namespace ClientSync.UI
         private readonly ICustomerService _customerService;
 
         #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class with the specified customer service.
@@ -22,12 +27,18 @@ namespace ClientSync.UI
         {
             InitializeComponent();
             _customerService = customerService;
-
-            LoadCustomerDataAsync();
         }
 
+        #endregion
 
-        private async Task LoadCustomerDataAsync()
+        #region Private Methods
+
+        /// <summary>
+        /// Load customer data when the form is loaded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void MainWindow_Load(object sender, EventArgs e)
         {
             try
             {
@@ -39,6 +50,8 @@ namespace ClientSync.UI
             {
                 MessageBox.Show($"Error loading customers: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        } 
+
+        #endregion
     }
 }

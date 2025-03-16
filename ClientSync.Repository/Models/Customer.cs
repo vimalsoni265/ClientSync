@@ -1,7 +1,6 @@
 ﻿namespace ClientSync.Repository.Models
 {
     using System;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Represents a customer

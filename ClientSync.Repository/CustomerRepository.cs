@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace ClientSync.Repository
 {
+    /// <summary>
+    /// Implement <see cref="ICustomerRepository"/> <inheritdoc cref="ICustomerRepository"/>
+    /// </summary>
     public class CustomerRepository : ICustomerRepository
     {
         #region Fields & Constants
 
         private readonly string _connectionString;
-
-        private readonly Func<IDbConnection> _connectionFactory;
 
         #endregion
 
@@ -25,14 +26,19 @@ namespace ClientSync.Repository
         /// Default constructor
         /// </summary>
         /// <param name="connectionString"></param>
-        public CustomerRepository(string connectionString)
+        protected CustomerRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Constructor with connection factory
+        /// </summary>
+        /// <param name="connectionFactory"></param>
         public CustomerRepository(Func<IDbConnection> connectionFactory)
+            : this(connectionFactory().ConnectionString)
         {
-            _connectionString = connectionFactory().ConnectionString;
+            Console.WriteLine("CustomerRepository created with connection factory");
         }
 
         #endregion
