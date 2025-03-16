@@ -47,12 +47,6 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ClientSync.Core\ClientSync.Core.csproj">
-      <Project>{E4BDEF65-B4F5-4570-AA55-64557AFF321F}</Project>
-      <Name>ClientSync.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)$(TargetName).*" "$(SolutionDir)Executable"</PostBuildEvent>

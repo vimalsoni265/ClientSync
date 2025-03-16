@@ -1,11 +1,11 @@
-﻿namespace ClientSync.Repository.Interfaces
-{
-    using ClientSync.Repository.Models;
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
-    using System;
+﻿using ClientSync.Repository.Models;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using System;
 
+namespace ClientSync.Repository.Interfaces
+{
     /// <summary>
     /// Interface to interact with customer data from the database.
     /// </summary>

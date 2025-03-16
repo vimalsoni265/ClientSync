@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using ClientSync.Repository.Interfaces;
+﻿using ClientSync.Repository.Interfaces;
 using ClientSync.Repository.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace ClientSync.Repository
 {
@@ -15,6 +14,8 @@ namespace ClientSync.Repository
         #region Fields & Constants
 
         private readonly string _connectionString;
+
+        private readonly Func<IDbConnection> _connectionFactory;
 
         #endregion
 
@@ -27,6 +28,11 @@ namespace ClientSync.Repository
         public CustomerRepository(string connectionString)
         {
             _connectionString = connectionString;
+        }
+
+        public CustomerRepository(Func<IDbConnection> connectionFactory)
+        {
+            _connectionString = connectionFactory().ConnectionString;
         }
 
         #endregion
@@ -64,7 +70,7 @@ namespace ClientSync.Repository
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<Customer>> Find(Expression<Func<Customer, bool>> predicate)
+        public Task<IEnumerable<Customer>> Find(Expression<Func<Customer, bool>> predicate)
         {
             // do nothing for now.
             throw new NotImplementedException();
@@ -148,8 +154,9 @@ namespace ClientSync.Repository
                 LastPurchaseDate = reader.IsDBNull(reader.GetOrdinal("LastPurchaseDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("LastPurchaseDate")),
                 LastUpdateDate = reader.IsDBNull(reader.GetOrdinal("LastUpdateDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("LastUpdateDate")),
                 Password = reader.IsDBNull(reader.GetOrdinal("Password")) ? null : reader.GetString(reader.GetOrdinal("Password")),
+                Salt = reader.IsDBNull(reader.GetOrdinal("Salt")) ? null : reader.GetString(reader.GetOrdinal("Salt")),
             };
-            customer.SetPassword(customer.Password);
+            
             return customer;
         }
 

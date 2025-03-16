@@ -1,16 +1,13 @@
-﻿using ClientSync.Core;
-using ClientSync.Core.Interface;
-using System;
-
-namespace ClientSync.Repository.Models
+﻿namespace ClientSync.Repository.Models
 {
+    using System;
+    using System.Runtime.CompilerServices;
+
     /// <summary>
     /// Represents a customer
     /// </summary>
     public partial class Customer
     {
-        private readonly IPasswordHelper _passwordHelper;
-
         #region Properties
 
         /// <summary>
@@ -63,18 +60,18 @@ namespace ClientSync.Repository.Models
         #region Public Methods
 
         /// <summary>
-        /// Sets the password for the customer.
+        /// Overrides the ToString method to current record data.
         /// </summary>
-        /// <param name="password"></param>
-        public void SetPassword(string password)
-        {
-            Salt = _passwordHelper.GenerateSalt();
-            Password = _passwordHelper.ComputeHash(password, Salt);
-        }
-
+        /// <returns></returns>
         public override string ToString()
         {
-            return base.ToString();
+            return $"{base.ToString()}" +
+                $"{nameof(FirstName)}:{FirstName}" +
+                $"{nameof(LastName)}:{LastName}" +
+                $"{nameof(Age)}:{Age}" +
+                $"{nameof(Location)}:{Location}" +
+                $"{nameof(LastPurchaseDate)}:{LastPurchaseDate}" +
+                $"{nameof(LastUpdateDate)}:{LastUpdateDate}";
         }
 
         #endregion

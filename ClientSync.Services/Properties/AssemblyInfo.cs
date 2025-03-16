@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ClientSync.Core")]
+[assembly: AssemblyTitle("ClientSync.Services")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ClientSync.Core")]
+[assembly: AssemblyProduct("ClientSync.Services")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e4bdef65-b4f5-4570-aa55-64557aff321f")]
+[assembly: Guid("9c167421-b6f8-400f-94e4-77ff2d5b819b")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("ClientSync.Repository")]
+[assembly: InternalsVisibleTo("ClientSync.UI")]
