@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientSync.UI", "ClientSync.UI\ClientSync.UI.csproj", "{4C9D407E-1D39-42AD-9E8F-2868972751C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientSync.Repository", "ClientSync.Repository\ClientSync.Repository.csproj", "{96853B13-F261-48BE-8896-953D408762B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientSync.Core", "ClientSync.Core\ClientSync.Core.csproj", "{E4BDEF65-B4F5-4570-AA55-64557AFF321F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C9D407E-1D39-42AD-9E8F-2868972751C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C9D407E-1D39-42AD-9E8F-2868972751C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C9D407E-1D39-42AD-9E8F-2868972751C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C9D407E-1D39-42AD-9E8F-2868972751C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96853B13-F261-48BE-8896-953D408762B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96853B13-F261-48BE-8896-953D408762B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96853B13-F261-48BE-8896-953D408762B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96853B13-F261-48BE-8896-953D408762B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4BDEF65-B4F5-4570-AA55-64557AFF321F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4BDEF65-B4F5-4570-AA55-64557AFF321F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4BDEF65-B4F5-4570-AA55-64557AFF321F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4BDEF65-B4F5-4570-AA55-64557AFF321F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
