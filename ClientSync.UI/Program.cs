@@ -1,16 +1,17 @@
-﻿using System;
-using System.Windows.Forms;
-using Microsoft.Extensions.DependencyInjection;
-using System.Data.SqlClient;
-using System.Configuration;
+﻿using ClientSync.Common;
 using ClientSync.Repository;
 using ClientSync.Repository.Interfaces;
 using ClientSync.Services;
 using ClientSync.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.IO;
+using System.Windows.Forms;
 
 
 namespace ClientSync.UI
@@ -25,6 +26,8 @@ namespace ClientSync.UI
         {
             try
             {
+                Logger.Info(nameof(Program), "Application started.");
+
                 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
                 Application.ThreadException += ThreadExceptionHandler;
@@ -41,22 +44,24 @@ namespace ClientSync.UI
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                                
+
                 // Start the app with DI
                 Application.Run(serviceProvider.GetRequiredService<MainWindow>());
 
             }
             catch (FileNotFoundException ex)
             {
-                LogError(nameof(FileNotFoundException), ex);
-                MessageBox.Show($"Missing File: {ex.FileName}\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Error(ex);
+                throw;
             }
             catch (Exception ex)
             {
-                LogError(nameof(Exception), ex);
+                Logger.Error(ex);
+                throw;
             }
-
         }
+
+        #region Private Methods
 
         /// <summary>
         /// Open Terminal and print welcome message with version.
@@ -81,7 +86,7 @@ namespace ClientSync.UI
         {
             // Read connection string from App.config
             string connectionString = ConfigurationManager.ConnectionStrings["sqlConnection"].ConnectionString;
-            if(string.IsNullOrEmpty(connectionString))
+            if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentNullException("Connection string is missing! Check the config.");
             }
@@ -92,41 +97,45 @@ namespace ClientSync.UI
             services.AddScoped<Func<IDbConnection>>(sp => () => new SqlConnection(connectionString));
 
             // Register Repositories and Services
-            services.AddScoped<ICustomerRepository, CustomerRepository>(); 
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerService, CustomerService>();
 
             // Register Form for DI
-            services.AddTransient<MainWindow>(); 
+            services.AddTransient<MainWindow>();
 
             return services.BuildServiceProvider();
 
         }
 
+        #endregion
 
-        static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        #region Event Handlers
+
+        /// <summary>
+        /// Handles unhandled exceptions.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            LogError("Unhandled Exception", e.ExceptionObject as Exception);
+            Logger.Error(e.ExceptionObject as Exception);
         }
 
-        static void ThreadExceptionHandler(object sender, System.Threading.ThreadExceptionEventArgs e)
+        /// <summary>
+        /// Handles thread exceptions.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void ThreadExceptionHandler(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            LogError("Thread Exception", e.Exception);
+            Logger.Error(e.Exception);
         }
 
-        static void LogError(string errorType, Exception ex)
-        {
-            if (ex != null)
-            {
-                string message = $"{errorType}: {ex.Message}\nStackTrace:\n{ex.StackTrace}";
-                MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                File.WriteAllText("error_log.txt", message);
-            }
-        }
+        #endregion 
 
         // P/Invoke to kernel32.dll to allocate a new console window for the app (if not already running from one)
         [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
+        private static extern bool AllocConsole();
     }
 }

@@ -100,6 +100,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClientSync.Common\ClientSync.Common.csproj">
+      <Project>{72d30d20-e06b-4d08-a89f-8334d3232431}</Project>
+      <Name>ClientSync.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ClientSync.Repository\ClientSync.Repository.csproj">
       <Project>{96853b13-f261-48be-8896-953d408762b6}</Project>
       <Name>ClientSync.Repository</Name>
@@ -111,6 +115,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)$(TargetName).*" "$(SolutionDir)Executable"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetName).*" "$(SolutionDir)Executable"
+copy "*.dll" "$(SolutionDir)Executable"
+copy "*.xml" "$(SolutionDir)Executable"</PostBuildEvent>
   </PropertyGroup>
 </Project>

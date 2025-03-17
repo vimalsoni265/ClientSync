@@ -33,9 +33,13 @@
             this.tsp_lbl_recordCountVal = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgCustomers = new System.Windows.Forms.DataGridView();
+            this.pnl_controlContainer = new System.Windows.Forms.Panel();
+            this.btn_updateToUpper = new System.Windows.Forms.Button();
+            this.btn_SaveChanges = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).BeginInit();
+            this.pnl_controlContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -44,8 +48,9 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.tsp_lbl_recordCountVal});
-            this.statusStrip.Location = new System.Drawing.Point(0, 951);
+            this.statusStrip.Location = new System.Drawing.Point(0, 727);
             this.statusStrip.Name = "statusStrip";
+            this.statusStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.statusStrip.Size = new System.Drawing.Size(1062, 26);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip";
@@ -74,13 +79,14 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.dgCustomers, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pnl_controlContainer, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 89.31955F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.68045F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1062, 951);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1062, 727);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // dgCustomers
@@ -93,17 +99,49 @@
             this.dgCustomers.Name = "dgCustomers";
             this.dgCustomers.RowHeadersWidth = 51;
             this.dgCustomers.RowTemplate.Height = 24;
-            this.dgCustomers.Size = new System.Drawing.Size(1056, 843);
+            this.dgCustomers.Size = new System.Drawing.Size(1056, 643);
             this.dgCustomers.TabIndex = 0;
+            // 
+            // pnl_controlContainer
+            // 
+            this.pnl_controlContainer.Controls.Add(this.btn_SaveChanges);
+            this.pnl_controlContainer.Controls.Add(this.btn_updateToUpper);
+            this.pnl_controlContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnl_controlContainer.Location = new System.Drawing.Point(3, 652);
+            this.pnl_controlContainer.Name = "pnl_controlContainer";
+            this.pnl_controlContainer.Size = new System.Drawing.Size(1056, 72);
+            this.pnl_controlContainer.TabIndex = 1;
+            // 
+            // btn_updateToUpper
+            // 
+            this.btn_updateToUpper.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_updateToUpper.Location = new System.Drawing.Point(677, 14);
+            this.btn_updateToUpper.Name = "btn_updateToUpper";
+            this.btn_updateToUpper.Size = new System.Drawing.Size(182, 46);
+            this.btn_updateToUpper.TabIndex = 0;
+            this.btn_updateToUpper.Text = "LastName to UPPER";
+            this.btn_updateToUpper.UseVisualStyleBackColor = true;
+            this.btn_updateToUpper.Click += new System.EventHandler(this.Btn_updateToUpper_Click);
+            // 
+            // btn_SaveChanges
+            // 
+            this.btn_SaveChanges.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_SaveChanges.Location = new System.Drawing.Point(865, 14);
+            this.btn_SaveChanges.Name = "btn_SaveChanges";
+            this.btn_SaveChanges.Size = new System.Drawing.Size(182, 46);
+            this.btn_SaveChanges.TabIndex = 1;
+            this.btn_SaveChanges.Text = "Save Changes";
+            this.btn_SaveChanges.UseVisualStyleBackColor = true;
+            this.btn_SaveChanges.Click += new System.EventHandler(this.BtnSaveChanges_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1062, 977);
+            this.ClientSize = new System.Drawing.Size(1062, 753);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip);
-            this.MinimumSize = new System.Drawing.Size(1080, 1024);
+            this.MinimumSize = new System.Drawing.Size(1080, 800);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MainWindow";
@@ -112,6 +150,7 @@
             this.statusStrip.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).EndInit();
+            this.pnl_controlContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,5 +162,8 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.DataGridView dgCustomers;
+        private System.Windows.Forms.Panel pnl_controlContainer;
+        private System.Windows.Forms.Button btn_updateToUpper;
+        private System.Windows.Forms.Button btn_SaveChanges;
     }
 }
