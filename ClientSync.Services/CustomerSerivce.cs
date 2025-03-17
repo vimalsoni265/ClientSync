@@ -19,9 +19,6 @@
         #region Fields
 
         private readonly ICustomerRepository _customerRepository; 
-
-        const int m_saltLength = 16;
-
         private const string ClassName = nameof(CustomerService);
 
         #endregion
@@ -121,44 +118,6 @@
             Logger.Info(ClassName, "Exited");
         }
 
-        /// <inheritdoc/>
-        public void SetCustomerPassword(Customer customer, string password = "password")
-        {
-            customer.Salt = GenerateSalt(m_saltLength);
-            customer.Password = ComputeSAH1Hash($"{password}{customer.Salt}");
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Generates a random salt.
-        /// </summary>
-        /// <returns></returns>
-        protected string GenerateSalt(int length)
-        {
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                var saltBytes = new byte[length];
-                rng.GetBytes(saltBytes);
-                return Convert.ToBase64String(saltBytes);
-            }
-        }
-
-        /// <summary>
-        /// Computes the hash of the password.
-        /// </summary>
-        /// <param name="plainText"></param>
-        /// <returns></returns>
-        protected string ComputeSAH1Hash(string plainText)
-        {
-            using (var sha1 = SHA1.Create())
-            {
-                var hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(plainText));
-                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-            }
-        }
         #endregion
     }
 }

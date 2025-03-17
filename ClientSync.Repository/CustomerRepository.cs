@@ -162,7 +162,12 @@ namespace ClientSync.Repository
                 Password = reader.IsDBNull(reader.GetOrdinal("Password")) ? null : reader.GetString(reader.GetOrdinal("Password")),
                 Salt = reader.IsDBNull(reader.GetOrdinal("Salt")) ? null : reader.GetString(reader.GetOrdinal("Salt")),
             };
-            
+
+            // Convert to local time.
+            customer.LastPurchaseDate = customer.LastPurchaseDate?.ToLocalTime();
+            customer.LastUpdateDate = customer.LastUpdateDate?.ToLocalTime();
+
+
             return customer;
         }
 

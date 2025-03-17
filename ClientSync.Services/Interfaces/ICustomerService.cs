@@ -61,12 +61,5 @@ namespace ClientSync.Services.Interfaces
         /// <param name="ids"></param>
         /// <returns></returns>
         Task DeleteCustomerAsync(IEnumerable<int> ids);
-
-        /// <summary>
-        /// Set the password for a customer.
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <param name="password"></param>
-        void SetCustomerPassword(Customer customer, string password);
     }
 }

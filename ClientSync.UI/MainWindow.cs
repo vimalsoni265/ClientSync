@@ -1,9 +1,13 @@
 ﻿using ClientSync.Common;
 using ClientSync.Repository.Models;
+using ClientSync.Services;
 using ClientSync.Services.Interfaces;
+using ClientSync.UI.UserControls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -57,8 +61,8 @@ namespace ClientSync.UI
 
             try
             {
-                if (dgCustomers.DataSource is BindingSource source && 
-                    source.DataSource is List<Customer> customers && 
+                if (dgCustomers.DataSource is BindingSource source &&
+                    source.DataSource is List<Customer> customers &&
                     customers.Any())
                 {
                     (sender as Button).Enabled = false;
@@ -69,7 +73,6 @@ namespace ClientSync.UI
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -104,14 +107,203 @@ namespace ClientSync.UI
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
+                // Update Grid
+                await LoadCustomerData();
+
                 // Disable the button to prevent multiple clicks.
                 (sender as Button).Enabled = true;
                 Logger.Info(ClassName, "Exited");
             }
+        }
+
+        /// <summary>
+        /// Handle <see cref="btn_exportJson"/> button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnExportJson_Click(object sender, EventArgs e)
+        {
+            Logger.Info(ClassName, $"Entered");
+            try
+            {
+                // Disable the button to prevent multiple clicks.
+                (sender as Button).Enabled = false;
+
+                string inputName = string.Empty;
+
+                // Show prompt to get the user's first name.
+                using (var promptInput = new PromptInputBox("Enter first name of user", typeof(string)))
+                {
+                    if (DialogResult.OK == promptInput.ShowDialog())
+                    {
+                        inputName = promptInput.Value.Trim();
+                        Logger.Info(ClassName, $"input from prompt dialog: {inputName}");
+                    }
+                }
+
+                // Determine if the input is empty or not.
+                if (string.IsNullOrEmpty(inputName))
+                {
+                    MessageBox.Show("First name cannot be empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (dgCustomers.DataSource is BindingSource source &&
+                    source.DataSource is List<Customer> customers &&
+                    customers.Any())
+                {
+                    // Get all customers, filter by first name (ignore case)
+                    var filteredRecord = customers.Where(c => c.FirstName.Equals(inputName, StringComparison.OrdinalIgnoreCase));
+                    if (!filteredRecord.Any())
+                    {
+                        MessageBox.Show("No matching customers found!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    // Prompt for file location.
+                    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                    {
+                        saveFileDialog.Filter = "JSON files (*.json)|*.json";
+                        saveFileDialog.Title = "Save JSON File";
+                        saveFileDialog.FileName = $"Customers_{inputName}.json";
+
+                        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            // Serialize to JSON.
+                            string json = JsonSerializer.Serialize(filteredRecord, new JsonSerializerOptions { WriteIndented = true });
+
+                            // Write to file.
+                            File.WriteAllText(saveFileDialog.FileName, json);
+                            MessageBox.Show($"Customer data exported successfully at Location: {saveFileDialog.FileName}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            finally
+            {
+                (sender as Button).Enabled = true;
+                Logger.Info(ClassName, "Exited");
+            }
+        }
+
+        /// <summary>
+        /// Handle <see cref="btn_searchByAge"/> button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Btn_searchByAge_Click(object sender, EventArgs e)
+        {
+            Logger.Info(ClassName, $"Entered");
+            try
+            {
+                // Disable the button to prevent multiple clicks.
+                (sender as Button).Enabled = false;
+
+                string inputValue = string.Empty;
+
+                // Show prompt to get the user's first name.
+                using (var promptInput = new PromptInputBox("Enter maximum age", typeof(int)))
+                {
+                    if (DialogResult.OK == promptInput.ShowDialog())
+                    {
+                        inputValue = promptInput.Value.Trim();
+                    }
+                }
+
+                // Determine if the input is empty or not.
+                if (string.IsNullOrEmpty(inputValue) || !int.TryParse(inputValue, out int maxAge))
+                {
+                    MessageBox.Show("Invalid age entered!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (dgCustomers.DataSource is BindingSource source &&
+                    source.DataSource is List<Customer> customers &&
+                    customers.Any())
+                {
+                    // Get all customers, filter by age using LINQ.
+                    var filteredRecord = customers.Where(c => c.Age <= maxAge).ToList();
+                    if (!filteredRecord.Any())
+                    {
+                        MessageBox.Show("No matching customers found!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    // Display the filtered list in DataGridView
+                    BindCustomerData(filteredRecord);
+                    source.ResetBindings(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            finally
+            {
+                (sender as Button).Enabled = true;
+                Logger.Info(ClassName, "Exited");
+            }
+        }
+
+        /// <summary>
+        /// Handle <see cref="btn_resetGrid"/> button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Btn_resetGrid_Click(object sender, EventArgs e) => await LoadCustomerData();
+
+        /// <summary>
+        /// Handled <see cref="dgCustomers"/> dataGridView CellContent Click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private async void DgCustomers_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Logger.Info(ClassName, $"Entered, Clicked Cell of row:{e.RowIndex}, col:{e.ColumnIndex}");
+
+            try
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex == dgCustomers.Columns["SetPassword"].Index)
+                {
+                    Customer customer = dgCustomers.Rows[e.RowIndex].DataBoundItem as Customer;
+                    if (customer != null)
+                    {
+                        customer.SetPassword("Password");
+
+                        // Update in DB (Async)
+                        await _customerService.UpdateCustomerAsync(customer);
+
+                        dgCustomers.Refresh();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            finally
+            {
+                Logger.Info(ClassName, "Exited");
+            }
+        }
+
+        /// <summary>
+        /// Triggered when the form is closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Unsubscribe event to avoid resource .
+            dgCustomers.CellContentClick -= DgCustomers_CellContentClick;
         }
 
         #endregion
@@ -126,12 +318,38 @@ namespace ClientSync.UI
         {
             if (customers.Any())
             {
+                // Unsubscribe event to avoid multiple bindings
+                dgCustomers.CellContentClick -= DgCustomers_CellContentClick;
+
                 // Bind the data to the grid.
                 BindingSource bindingSource = new BindingSource
                 {
                     DataSource = customers
                 };
+
                 dgCustomers.DataSource = bindingSource;
+
+                // Make some columns readonly.
+                dgCustomers.Columns["LastPurchaseDate"].ReadOnly = true;
+                dgCustomers.Columns["LastUpdateDate"].ReadOnly = true;
+                dgCustomers.Columns["Password"].ReadOnly = true;
+                dgCustomers.Columns["Salt"].ReadOnly = true;
+
+                // Add SetPassword button to each record.
+                if (dgCustomers.Columns["SetPassword"] == null) // Avoid duplicate columns
+                {
+                    DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn
+                    {
+                        Name = "SetPassword",
+                        HeaderText = "Set Password",
+                        Text = "Set Password",
+                        UseColumnTextForButtonValue = true
+                    };
+                    dgCustomers.Columns.Add(btnColumn);
+                }
+
+                // Subscribe to the event to perform specific action on cell click.
+                dgCustomers.CellContentClick += DgCustomers_CellContentClick;
             }
         }
 
@@ -154,7 +372,7 @@ namespace ClientSync.UI
                 if (customers != null && customers.Any())
                 {
                     BindCustomerData(customers);
-                    tsp_lbl_recordCountVal.Text = customers.Count().ToString();
+                    lbl_recordVal.Text = customers.Count().ToString();
                     Logger.Info(ClassName, $"{customers.Count()} records fetched successfully.");
                 }
                 else
@@ -162,7 +380,7 @@ namespace ClientSync.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Error(ex);
             }
 
             Logger.Info(ClassName, "Exited");
@@ -195,7 +413,6 @@ namespace ClientSync.UI
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -231,7 +448,6 @@ namespace ClientSync.UI
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -240,6 +456,6 @@ namespace ClientSync.UI
             return customers;
         }
 
-        #endregion        
+        #endregion
     }
 }
