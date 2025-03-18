@@ -82,6 +82,7 @@
             this.dgCustomers.RowTemplate.Height = 24;
             this.dgCustomers.Size = new System.Drawing.Size(1242, 577);
             this.dgCustomers.TabIndex = 0;
+            this.dgCustomers.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DGCustomers_KeyDown);
             // 
             // btn_updateToUpper
             // 

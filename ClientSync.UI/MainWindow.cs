@@ -457,5 +457,22 @@ namespace ClientSync.UI
         }
 
         #endregion
+
+        /// <summary>
+        /// Handle key down event to prevent copy/paste.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DGCustomers_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode.Equals(Keys.C) || e.KeyCode.Equals(Keys.V))
+            {
+                // TODO: filter Cell here, and only prevent password and salt. 
+                // that part is not given in requirement though.
+
+                // Prevent copy/paste
+                e.SuppressKeyPress = true;
+            }
+        }
     }
 }
