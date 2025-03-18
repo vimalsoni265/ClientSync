@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 
 namespace ClientSync.Services.Interfaces
 {
-
+    /// <summary>
+    /// Interface to interact with customer data from the database.
+    /// </summary>
     public interface ICustomerService
     {
         /// <summary>

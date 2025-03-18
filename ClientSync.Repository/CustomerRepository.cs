@@ -150,7 +150,7 @@ namespace ClientSync.Repository
         /// <returns></returns>
         private Customer MapCustomer(SqlDataReader reader)
         {
-            var customer =  new Customer
+            var customer = new Customer
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                 FirstName = reader.GetString(reader.GetOrdinal("FirstName")),

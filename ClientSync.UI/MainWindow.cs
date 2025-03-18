@@ -1,6 +1,5 @@
 ﻿using ClientSync.Common;
 using ClientSync.Repository.Models;
-using ClientSync.Services;
 using ClientSync.Services.Interfaces;
 using ClientSync.UI.UserControls;
 using System;
