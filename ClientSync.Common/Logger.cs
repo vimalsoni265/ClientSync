@@ -38,6 +38,11 @@ namespace ClientSync.Common
         private static string LogsBaseDirectory { get; set; }
 
         /// <summary>
+        /// The constant Exited string for Logger.
+        /// </summary>
+        public const string Exited = nameof(Exited);
+
+        /// <summary>
         /// The static Constructor for <seealso cref="Logger"/> class
         /// </summary>
         static Logger()

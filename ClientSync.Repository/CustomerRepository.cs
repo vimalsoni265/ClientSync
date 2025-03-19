@@ -176,7 +176,7 @@ namespace ClientSync.Repository
         /// </summary>
         /// <param name="command"></param>
         /// <param name="customer"></param>
-        private void AddCustomerParameters(SqlCommand command, Customer customer)
+        private static void AddCustomerParameters(SqlCommand command, Customer customer)
         {
             command.Parameters.AddWithValue("@FirstName", customer.FirstName);
             command.Parameters.AddWithValue("@LastName", customer.LastName);

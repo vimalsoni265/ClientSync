@@ -60,7 +60,7 @@
         {
             Logger.Info(ClassName, $"Entered, IsNull:{customers is null}, RecordToAdd: {customers.Count()}");
 
-            if (customers != null & customers.Any())
+            if (customers != null && customers.Any())
             {
                 // Loop through each customer and add them to the database.
                 foreach (var customer in customers)
@@ -68,7 +68,7 @@
                     await AddCustomerAsync(customer);
                 }
             }
-            Logger.Info(ClassName, "Exited");
+            Logger.Info(ClassName, Logger.Exited);
         }
 
         /// <inheritdoc/>
@@ -83,7 +83,7 @@
         {
             Logger.Info(ClassName, $"Entered, IsNull:{customers is null}, RecordToUpdate: {customers.Count()}");
 
-            if (customers != null & customers.Any())
+            if (customers != null && customers.Any())
             {
                 // Loop through each customer and add them to the database.
                 foreach (var customer in customers)
@@ -91,7 +91,7 @@
                     await UpdateCustomerAsync(customer);
                 }
             }
-            Logger.Info(ClassName, "Exited");
+            Logger.Info(ClassName, Logger.Exited);
         }
 
         /// <inheritdoc/>
@@ -105,7 +105,7 @@
         {
             Logger.Info(ClassName, $"Entered, IsNull:{ids is null}, RecordToUpdate: {ids.Count()}");
 
-            if (ids != null & ids.Any())
+            if (ids != null && ids.Any())
             {
                 // Loop through each customer and add them to the database.
                 foreach (var id in ids)
@@ -113,7 +113,7 @@
                     await DeleteCustomerAsync(id);
                 }
             }
-            Logger.Info(ClassName, "Exited");
+            Logger.Info(ClassName, Logger.Exited);
         }
 
         #endregion

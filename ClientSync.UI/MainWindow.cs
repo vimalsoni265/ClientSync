@@ -61,8 +61,7 @@ namespace ClientSync.UI
             try
             {
                 if (dgCustomers.DataSource is BindingSource source &&
-                    source.DataSource is List<Customer> customers &&
-                    customers.Any())
+                    source.DataSource is List<Customer> customers)
                 {
                     (sender as Button).Enabled = false;
                     BindCustomerData(UpdateLastNameToUpperCase(customers));
@@ -76,7 +75,7 @@ namespace ClientSync.UI
             finally
             {
                 (sender as Button).Enabled = true;
-                Logger.Info(ClassName, "Exited");
+                Logger.Info(ClassName, Logger.Exited);
             }
         }
 
@@ -114,7 +113,7 @@ namespace ClientSync.UI
 
                 // Disable the button to prevent multiple clicks.
                 (sender as Button).Enabled = true;
-                Logger.Info(ClassName, "Exited");
+                Logger.Info(ClassName, Logger.Exited);
             }
         }
 
@@ -188,7 +187,7 @@ namespace ClientSync.UI
             finally
             {
                 (sender as Button).Enabled = true;
-                Logger.Info(ClassName, "Exited");
+                Logger.Info(ClassName, Logger.Exited);
             }
         }
 
@@ -224,8 +223,7 @@ namespace ClientSync.UI
                 }
 
                 if (dgCustomers.DataSource is BindingSource source &&
-                    source.DataSource is List<Customer> customers &&
-                    customers.Any())
+                    source.DataSource is List<Customer> customers)
                 {
                     // Get all customers, filter by age using LINQ.
                     var filteredRecord = customers.Where(c => c.Age <= maxAge).ToList();
@@ -247,7 +245,7 @@ namespace ClientSync.UI
             finally
             {
                 (sender as Button).Enabled = true;
-                Logger.Info(ClassName, "Exited");
+                Logger.Info(ClassName, Logger.Exited);
             }
         }
 
@@ -290,7 +288,7 @@ namespace ClientSync.UI
             }
             finally
             {
-                Logger.Info(ClassName, "Exited");
+                Logger.Info(ClassName, Logger.Exited);
             }
         }
 
@@ -315,7 +313,7 @@ namespace ClientSync.UI
         /// <param name="customers"></param>
         protected void BindCustomerData(IEnumerable<Customer> customers)
         {
-            if (customers.Any())
+            if (customers != null)
             {
                 // Unsubscribe event to avoid multiple bindings
                 dgCustomers.CellContentClick -= DgCustomers_CellContentClick;
@@ -350,7 +348,11 @@ namespace ClientSync.UI
                 // Subscribe to the event to perform specific action on cell click.
                 dgCustomers.CellContentClick += DgCustomers_CellContentClick;
             }
+            else
+                Logger.Info(ClassName, "No records found.");
+        
         }
+
 
         /// <summary>
         /// Load customer data.
@@ -368,21 +370,16 @@ namespace ClientSync.UI
                 var customers = await _customerService.GetAllCustomersAsync();
 
                 // Bind the data to the grid, if any.
-                if (customers != null && customers.Any())
-                {
-                    BindCustomerData(customers);
-                    lbl_recordVal.Text = customers.Count().ToString();
-                    Logger.Info(ClassName, $"{customers.Count()} records fetched successfully.");
-                }
-                else
-                    Logger.Info(ClassName, "No records found.");
+                BindCustomerData(customers);
+                lbl_recordVal.Text = customers.Count().ToString();
+                Logger.Info(ClassName, $"{customers.Count()} records fetched successfully.");
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
 
-            Logger.Info(ClassName, "Exited");
+            Logger.Info(ClassName, Logger.Exited);
         }
 
         /// <summary>
@@ -390,7 +387,7 @@ namespace ClientSync.UI
         /// </summary>
         /// <param name="customers"></param>
         /// <returns></returns>
-        protected IEnumerable<Customer> UpdateLastNameToUpperCase(List<Customer> customers)
+        protected static IEnumerable<Customer> UpdateLastNameToUpperCase(List<Customer> customers)
         {
             Logger.Info(ClassName, "Entered");
 
@@ -415,7 +412,7 @@ namespace ClientSync.UI
             }
             finally
             {
-                Logger.Info(ClassName, "Exited");
+                Logger.Info(ClassName, Logger.Exited);
             }
             return customers;
         }
@@ -425,7 +422,7 @@ namespace ClientSync.UI
         /// </summary>
         /// <param name="customers"></param>
         /// <returns></returns>
-        protected IEnumerable<Customer> UpdateFirstNameToUpperCase(List<Customer> customers)
+        protected static IEnumerable<Customer> UpdateFirstNameToUpperCase(List<Customer> customers)
         {
             Logger.Info(ClassName, "Entered");
 
@@ -450,7 +447,7 @@ namespace ClientSync.UI
             }
             finally
             {
-                Logger.Info(ClassName, "Exited");
+                Logger.Info(ClassName, Logger.Exited);
             }
             return customers;
         }
@@ -466,7 +463,7 @@ namespace ClientSync.UI
         {
             if (e.Control && e.KeyCode.Equals(Keys.C) || e.KeyCode.Equals(Keys.V))
             {
-                // TODO: filter Cell here, and only prevent password and salt. 
+                // filter Cell here, and only prevent password and salt. 
                 // that part is not given in requirement though.
 
                 // Prevent copy/paste
